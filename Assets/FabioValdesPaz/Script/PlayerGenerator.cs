@@ -8,7 +8,11 @@ public class PlayerGenerator : MonoBehaviour
     public ReglasGeneradas reglas;
     public TextMeshPro jugadorTexto;
     public DocumentGenerator documentGenerator;
+
+    public ReglasGeneradas jugadorActual;
+
     [Range(0f, 1f)] public float probabilidadCoincidencia = 0.8f;
+    [Range(0f, 1f)] public float probabilidadDelitoProfesion = 0.35f;
 
     //void Start()
     //{
@@ -20,9 +24,9 @@ public class PlayerGenerator : MonoBehaviour
     public void GenerarNuevoJugador()
     {
         reglas = ruleGenerator.reglas;
-        ReglasGeneradas jugador = GenerarJugadorConProbabilidad(reglas);
-        MostrarJugador(jugador);
-        documentGenerator.GenerarDocumentos(jugador);
+        jugadorActual = GenerarJugadorConProbabilidad(reglas);
+        MostrarJugador(jugadorActual);
+        documentGenerator.GenerarDocumentos(jugadorActual);
     }
 
     ReglasGeneradas GenerarJugadorConProbabilidad(ReglasGeneradas reglas)
@@ -31,8 +35,11 @@ public class PlayerGenerator : MonoBehaviour
         {
             fecha = Coincide() ? reglas.fecha : ElegirDiferente(database.fechasVencimiento, reglas.fecha),
             region = Coincide() ? reglas.region : ElegirDiferente(database.regionesProhibidas, reglas.region),
-            delito = Coincide() ? reglas.delito : ElegirDiferente(database.delitosProhibidos, reglas.delito),
-            profesion = Coincide() ? reglas.profesion : ElegirDiferente(database.profesionesProhibidas, reglas.profesion),
+
+            // 35% de coincidencia para delito y profesión
+            delito = CoincideConProbabilidad(probabilidadDelitoProfesion) ? reglas.delito : ElegirDiferente(database.delitosProhibidos, reglas.delito),
+            profesion = CoincideConProbabilidad(probabilidadDelitoProfesion) ? reglas.profesion : ElegirDiferente(database.profesionesProhibidas, reglas.profesion),
+
             trabajo = Coincide() ? reglas.trabajo : ElegirDiferente(database.tiposDeTrabajoPermitidos, reglas.trabajo),
             dinero = Coincide() ? reglas.dinero : reglas.dinero - Random.Range(10, 50)
         };
@@ -65,5 +72,10 @@ public class PlayerGenerator : MonoBehaviour
     bool Coincide()
     {
         return Random.value <= probabilidadCoincidencia;
+    }
+
+    bool CoincideConProbabilidad(float probabilidad)
+    {
+        return Random.value <= probabilidad;
     }
 }

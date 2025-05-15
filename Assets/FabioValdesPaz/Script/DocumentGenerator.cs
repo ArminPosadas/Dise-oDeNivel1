@@ -5,11 +5,12 @@ public class DocumentGenerator : MonoBehaviour
 {
     public RuleDatabase database;
     public TextMeshPro documentosTexto;
+    public ReglasGeneradas documentoActual;
     [Range(0f, 1f)] public float probabilidadDocumentosCorrectos = 0.95f;
 
     public void GenerarDocumentos(ReglasGeneradas jugadorReal)
     {
-        ReglasGeneradas documentos = new ReglasGeneradas
+        documentoActual = new ReglasGeneradas
         {
             fecha = Coincide() ? jugadorReal.fecha : ElegirDiferente(database.fechasVencimiento, jugadorReal.fecha),
             region = Coincide() ? jugadorReal.region : ElegirDiferente(database.regionesProhibidas, jugadorReal.region),
@@ -19,7 +20,7 @@ public class DocumentGenerator : MonoBehaviour
             dinero = Coincide() ? jugadorReal.dinero : jugadorReal.dinero - Random.Range(5, 20)
         };
 
-        MostrarDocumentos(documentos);
+        MostrarDocumentos(documentoActual);
     }
 
     void MostrarDocumentos(ReglasGeneradas d)

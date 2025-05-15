@@ -35,8 +35,8 @@ public class RuleGenerator : MonoBehaviour
 
         hojaTexto.text =
             "Solo puede pasar la persona si sus papeles coinciden con los siguientes datos:\n\n" +
-            $"- Fecha de vencimiento del pasaporte: antes del {fecha}\n" +
-            $"- No debe venir de la región: {region}\n" +
+            $"- Fechas de pasaprte permitidas: {fecha}\n" +
+            $"- Se haceptan de la Region: {region}\n" +
             $"- No debe tener antecedentes de: {delito}\n" +
             $"- Debe tener al menos ${dinero}\n" +
             $"- Tipo de trabajo que busca: {trabajo}\n" +
