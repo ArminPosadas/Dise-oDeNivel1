@@ -1015,7 +1015,7 @@ MonoBehaviour:
     profesion: 
     trabajo: 
     dinero: 0
-  probabilidadDocumentosCorrectos: 0.95
+  probabilidadDocumentosCorrectos: 0.99
 --- !u!4 &1019490843
 Transform:
   m_ObjectHideFlags: 0
@@ -1645,7 +1645,7 @@ MonoBehaviour:
     profesion: 
     trabajo: 
     dinero: 0
-  probabilidadCoincidencia: 0.8
+  probabilidadCoincidencia: 0.89
   probabilidadDelitoProfesion: 0.35
 --- !u!4 &1707479693
 Transform:
@@ -1761,6 +1761,7 @@ GameObject:
   - component: {fileID: 1901024219}
   - component: {fileID: 1901024218}
   - component: {fileID: 1901024217}
+  - component: {fileID: 1901024220}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1783,6 +1784,7 @@ MonoBehaviour:
   playerGenerator: {fileID: 1707479692}
   ruleGenerator: {fileID: 370407416}
   documentGenerator: {fileID: 1019490842}
+  gameManager: {fileID: 1901024220}
 --- !u!114 &1901024218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1798,6 +1800,7 @@ MonoBehaviour:
   playerGenerator: {fileID: 1707479692}
   ruleGenerator: {fileID: 370407416}
   documentGenerator: {fileID: 1019490842}
+  gameManager: {fileID: 1901024220}
 --- !u!4 &1901024219
 Transform:
   m_ObjectHideFlags: 0
@@ -1813,6 +1816,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1901024220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901024216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a575cc0815aef9408b18fbd17e1375b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ruleGenerator: {fileID: 370407416}
+  playerGenerator: {fileID: 1707479692}
+  documentGenerator: {fileID: 1019490842}
 --- !u!1001 &2217261582657543224
 PrefabInstance:
   m_ObjectHideFlags: 0

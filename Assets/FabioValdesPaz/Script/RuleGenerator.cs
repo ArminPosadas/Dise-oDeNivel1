@@ -12,6 +12,11 @@ public class RuleGenerator : MonoBehaviour
 
     void Start()
     {
+        GenerarNuevaRegla();
+    }
+
+    public void GenerarNuevaRegla()
+    {
         GenerarHoja();
     }
 

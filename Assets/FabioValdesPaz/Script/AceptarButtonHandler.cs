@@ -5,6 +5,7 @@ public class AceptarButtonHandler : MonoBehaviour
     public PlayerGenerator playerGenerator;
     public RuleGenerator ruleGenerator;
     public DocumentGenerator documentGenerator;
+    public GameManager gameManager;
 
     public void Aceptar()
     {
@@ -34,6 +35,9 @@ public class AceptarButtonHandler : MonoBehaviour
         {
             Debug.Log(" Amonestación: dejó pasar a alguien con datos incorrectos.");
         }
+        playerGenerator.GenerarNuevoJugador();
+        documentGenerator.GenerarDocumentos(jugador);
+        gameManager.PersonaAtendida();
     }
 
 

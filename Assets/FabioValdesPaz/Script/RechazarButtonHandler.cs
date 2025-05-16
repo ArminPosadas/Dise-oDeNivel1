@@ -5,6 +5,7 @@ public class RechazarButtonHandler : MonoBehaviour
     public PlayerGenerator playerGenerator;
     public RuleGenerator ruleGenerator;
     public DocumentGenerator documentGenerator;
+    public GameManager gameManager;
 
     public void Rechazar()
     {
@@ -34,6 +35,10 @@ public class RechazarButtonHandler : MonoBehaviour
         {
             Debug.Log(" Bien. Rechazaste correctamente a alguien con datos inválidos.");
         }
+
+        playerGenerator.GenerarNuevoJugador();
+        documentGenerator.GenerarDocumentos(jugador);
+        gameManager.PersonaAtendida();
     }
 
     private bool CompararReglas(ReglasGeneradas a, ReglasGeneradas b)
