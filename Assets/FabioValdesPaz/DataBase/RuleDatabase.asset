@@ -27,4 +27,9 @@ MonoBehaviour:
   fechasVencimiento:
   - 2023
   - 2026
+  objetosProhibidos:
+  - Granada
+  - Drogas
+  - Bracaletes
+  - Telefono
   dineroMinimoRequerido: 100

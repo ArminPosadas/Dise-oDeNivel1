@@ -26,14 +26,25 @@ public class RechazarButtonHandler : MonoBehaviour
             jugador.profesion == documento.profesion &&
             jugador.delito != reglas.delito &&
             jugador.profesion != reglas.profesion;
-
-        if (jugadorYDocumentoIguales && datosGeneralesCoincidenConReglas && delitoYProfesionValidos)
+        
+        bool objetosValidos = true;
+        foreach (var objeto in jugador.objetosProhibidos)
         {
-            Debug.Log(" AmonestaciÛn: rechazaste a alguien que sÌ podÌa pasar.");
+            if (reglas.objetosProhibidos.Contains(objeto))
+            {
+                objetosValidos = false;
+                Debug.Log($"Objeto prohibido encontrado: {objeto}");
+                break;
+            }
+        }
+
+        if (jugadorYDocumentoIguales && datosGeneralesCoincidenConReglas && delitoYProfesionValidos && objetosValidos)
+        {
+            Debug.Log(" Amonestaci√≥n: rechazaste a alguien que s√≠ pod√≠a pasar.");
         }
         else
         {
-            Debug.Log(" Bien. Rechazaste correctamente a alguien con datos inv·lidos.");
+            Debug.Log(" Bien. Rechazaste correctamente a alguien con datos inv√°lidos.");
         }
 
         playerGenerator.GenerarNuevoJugador();
@@ -52,6 +63,4 @@ public class RechazarButtonHandler : MonoBehaviour
             a.dinero == b.dinero;
     }
 }
-
-
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -30,6 +31,11 @@ public class RuleGenerator : MonoBehaviour
         string trabajo = ElegirAleatorio(database.tiposDeTrabajoPermitidos);
         string fecha = ElegirAleatorio(database.fechasVencimiento);
         int dinero = database.dineroMinimoRequerido;
+        
+        // Add this for prohibited objects
+        List<string> objetosProhibidos = new List<string>();
+        objetosProhibidos.Add(database.objetosProhibidos[0]); // Always include first item
+        objetosProhibidos.Add(database.objetosProhibidos[1]); // Always include second item
 
         reglas.region = region;
         reglas.delito = delito;
@@ -37,6 +43,7 @@ public class RuleGenerator : MonoBehaviour
         reglas.trabajo = trabajo;
         reglas.fecha = fecha;
         reglas.dinero = dinero;
+        reglas.objetosProhibidos = objetosProhibidos; // Add this line
 
         hojaTexto.text =
             "Solo puede pasar la persona si sus papeles coinciden con los siguientes datos:\n\n" +
@@ -45,7 +52,8 @@ public class RuleGenerator : MonoBehaviour
             $"- No debe tener antecedentes de: {delito}\n" +
             $"- Debe tener al menos ${dinero}\n" +
             $"- Tipo de trabajo que busca: {trabajo}\n" +
-            $"- Profesiones prohibidas: {profesion}";
+            $"- Profesiones prohibidas: {profesion}\n" + 
+            $"- Objetos prohibidos: {string.Join(", ", objetosProhibidos)}"; // Add this line
 
         playerGenerator.GenerarNuevoJugador();
     }

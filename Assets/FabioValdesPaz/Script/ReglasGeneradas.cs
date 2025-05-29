@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 [System.Serializable]
 public class ReglasGeneradas
 {
@@ -7,4 +9,5 @@ public class ReglasGeneradas
     public string profesion;
     public string trabajo;
     public int dinero;
+    public List<string> objetosProhibidos;
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -8,6 +9,7 @@ public class PlayerGenerator : MonoBehaviour
     public ReglasGeneradas reglas;
     public TextMeshPro jugadorTexto;
     public DocumentGenerator documentGenerator;
+    public SkeletonObjectManager skeletonManager;
 
     public ReglasGeneradas jugadorActual;
 
@@ -20,6 +22,20 @@ public class PlayerGenerator : MonoBehaviour
     //    ReglasGeneradas jugador = GenerarJugadorConProbabilidad(reglas);
     //    MostrarJugador(jugador);
     //}
+    
+    List<string> GenerarObjetosProhibidos()
+    {
+        List<string> objetos = new List<string>();
+        int cantidadObjetos = Random.Range(0, 3); // 0 to 2 objects
+        
+        for (int i = 0; i < cantidadObjetos; i++)
+        {
+            int randomIndex = Random.Range(2, database.objetosProhibidos.Count);
+            objetos.Add(database.objetosProhibidos[randomIndex]);
+        }
+        
+        return objetos;
+    }
 
     public void GenerarNuevoJugador()
     {
@@ -27,6 +43,7 @@ public class PlayerGenerator : MonoBehaviour
         jugadorActual = GenerarJugadorConProbabilidad(reglas);
         MostrarJugador(jugadorActual);
         documentGenerator.GenerarDocumentos(jugadorActual);
+        skeletonManager.SetupWithObjects(jugadorActual.objetosProhibidos);
     }
 
     ReglasGeneradas GenerarJugadorConProbabilidad(ReglasGeneradas reglas)
@@ -35,13 +52,11 @@ public class PlayerGenerator : MonoBehaviour
         {
             fecha = Coincide() ? reglas.fecha : ElegirDiferente(database.fechasVencimiento, reglas.fecha),
             region = Coincide() ? reglas.region : ElegirDiferente(database.regionesProhibidas, reglas.region),
-
-            // 35% de coincidencia para delito y profesión
             delito = CoincideConProbabilidad(probabilidadDelitoProfesion) ? reglas.delito : ElegirDiferente(database.delitosProhibidos, reglas.delito),
             profesion = CoincideConProbabilidad(probabilidadDelitoProfesion) ? reglas.profesion : ElegirDiferente(database.profesionesProhibidas, reglas.profesion),
-
             trabajo = Coincide() ? reglas.trabajo : ElegirDiferente(database.tiposDeTrabajoPermitidos, reglas.trabajo),
-            dinero = Coincide() ? reglas.dinero : reglas.dinero - Random.Range(10, 50)
+            dinero = Coincide() ? reglas.dinero : reglas.dinero - Random.Range(10, 50),
+            objetosProhibidos = GenerarObjetosProhibidos()
         };
     }
 
@@ -51,11 +66,20 @@ public class PlayerGenerator : MonoBehaviour
         jugadorTexto.text =
             " DATOS DEL JUGADOR:\n" +
             $"Pasaporte: {r.fecha}\n" +
-            $"Región: {r.region}\n" +
+            $"RegiÃ³n: {r.region}\n" +
             $"Delito: {r.delito}\n" +
             $"Dinero: ${r.dinero}\n" +
             $"Trabajo deseado: {r.trabajo}\n" +
-            $"Profesión: {r.profesion}";
+            $"ProfesiÃ³n: {r.profesion}";
+        
+        if (r.objetosProhibidos.Count > 0)
+        {
+            Debug.Log($"Objetos que lleva el jugador: {string.Join(", ", r.objetosProhibidos)}");
+        }
+        else
+        {
+            Debug.Log("El jugador no lleva objetos prohibidos");
+        }
     }
 
     string ElegirDiferente(System.Collections.Generic.List<string> lista, string excluido)

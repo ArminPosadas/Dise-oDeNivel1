@@ -9,6 +9,7 @@ public class RuleDatabase : ScriptableObject
     public List<string> profesionesProhibidas;
     public List<string> tiposDeTrabajoPermitidos;
     public List<string> fechasVencimiento;
+    public List<string> objetosProhibidos;
     public int dineroMinimoRequerido = 500;
 }
 

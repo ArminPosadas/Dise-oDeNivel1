@@ -28,11 +28,11 @@ public class DocumentGenerator : MonoBehaviour
         documentosTexto.text =
             " DOCUMENTOS PRESENTADOS:\n" +
             $"Pasaporte: {d.fecha}\n" +
-            $"Región: {d.region}\n" +
+            $"RegiÃ³n: {d.region}\n" +
             $"Delito: {d.delito}\n" +
             $"Dinero: ${d.dinero}\n" +
             $"Trabajo deseado: {d.trabajo}\n" +
-            $"Profesión: {d.profesion}";
+            $"ProfesiÃ³n: {d.profesion}";
     }
 
     bool Coincide()
