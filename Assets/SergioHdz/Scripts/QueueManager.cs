@@ -1,44 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SergioHdz.Scripts
 {
     public class QueueManager : MonoBehaviour
     {
+        [Header("Positions")]
         [SerializeField] private Transform[] queuePositions;
         [SerializeField] private Transform frontPosition;
         [SerializeField] private Transform boothPosition;
         [SerializeField] private Transform acceptPosition;
         [SerializeField] private Transform rejectPosition;
+
+        [Header("References")]
         [SerializeField] private GameObject npcPrefab;
+        [SerializeField] private Button playButton;
 
         private Queue<NPCController> npcQueue = new Queue<NPCController>();
-        private NPCController currentNpc;
+        private NPCController currentNpc;  
+        private NPCController npcInBooth;  
 
         private void Start()
         {
             SpawnNpcs(5);
             AdvanceQueue();
+            UpdatePlayButton();
         }
 
         private void SpawnNpcs(int count)
         {
             for (int i = 0; i < count; i++)
             {
-                GameObject npcGO = Instantiate(npcPrefab, queuePositions[i].position, Quaternion.identity);
-                NPCController npc = npcGO.GetComponent<NPCController>();
+                GameObject npcGo = Instantiate(npcPrefab, queuePositions[i].position, Quaternion.identity);
+                NPCController npc = npcGo.GetComponent<NPCController>();
                 npcQueue.Enqueue(npc);
             }
         }
 
         public void AdvanceQueue()
         {
-            if (currentNpc != null)
-            {
-                Destroy(currentNpc.gameObject);
-                currentNpc = null;
-            }
+            currentNpc = null;
 
             if (npcQueue.Count == 0)
             {
@@ -55,31 +58,37 @@ namespace SergioHdz.Scripts
                 npc.MoveTo(queuePositions[index].position);
                 index++;
             }
+
+            UpdatePlayButton();
         }
 
         public void OnPlayClicked()
         {
-            if (currentNpc != null)
+            if (currentNpc != null && npcInBooth == null)
             {
-                currentNpc.MoveTo(boothPosition.position);
+                npcInBooth = currentNpc;
+                npcInBooth.MoveTo(boothPosition.position);
+                currentNpc = null;
+                AdvanceQueue(); // Solo avanza la fila visual
+                UpdatePlayButton(); // Desactiva el botón
             }
         }
 
         public void AcceptNpc()
         {
-            if (currentNpc != null)
+            if (npcInBooth != null)
             {
-                currentNpc.MoveTo(acceptPosition.position);
-                StartCoroutine(DestroyAfterDelay(currentNpc));
+                npcInBooth.MoveTo(acceptPosition.position);
+                StartCoroutine(DestroyAfterDelay(npcInBooth));
             }
         }
 
         public void RejectNpc()
         {
-            if (currentNpc != null)
+            if (npcInBooth != null)
             {
-                currentNpc.MoveTo(rejectPosition.position);
-                StartCoroutine(DestroyAfterDelay(currentNpc));
+                npcInBooth.MoveTo(rejectPosition.position);
+                StartCoroutine(DestroyAfterDelay(npcInBooth));
             }
         }
 
@@ -93,17 +102,25 @@ namespace SergioHdz.Scripts
 
             yield return new WaitForSeconds(0.5f);
 
-            if (npc == currentNpc)
-            {
-                currentNpc = null;
-            }
-
             Destroy(npc.gameObject);
 
-            AdvanceQueue();
+            if (npc == npcInBooth)
+            {
+                npcInBooth = null;
+                UpdatePlayButton(); // Habilita el botón para el siguiente
+            }
+        }
+
+        private void UpdatePlayButton()
+        {
+            if (playButton != null)
+            {
+                playButton.interactable = (npcInBooth == null && currentNpc != null);
+            }
         }
     }
 }
+
 
 
 

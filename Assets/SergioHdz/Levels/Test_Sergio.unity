@@ -1422,6 +1422,7 @@ MonoBehaviour:
   acceptPosition: {fileID: 1727640338}
   rejectPosition: {fileID: 1101654085}
   npcPrefab: {fileID: 9177721588691741412, guid: 1709517d712f2b54999786bfac419b5d, type: 3}
+  playButton: {fileID: 694830312}
 --- !u!4 &1684543014
 Transform:
   m_ObjectHideFlags: 0
