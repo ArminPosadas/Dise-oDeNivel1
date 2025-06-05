@@ -1,14 +1,19 @@
 using UnityEngine;
+using System;
 
 namespace SergioHdz.Scripts
 {
-    public class NPCController : MonoBehaviour
+    public class NpcController : MonoBehaviour
     {
         [SerializeField] private Transform visualModel;
         [SerializeField] private float moveSpeed = 3f;
+        [SerializeField] private Sprite portrait;
 
         private Vector3 targetPosition;
         private bool isMoving;
+
+        public Action<NpcController> OnReachedDestination;
+        public Vector3 Destination => targetPosition; 
 
         public void MoveTo(Vector3 destination)
         {
@@ -26,6 +31,8 @@ namespace SergioHdz.Scripts
             {
                 transform.position = targetPosition;
                 isMoving = false;
+
+                OnReachedDestination?.Invoke(this);
             }
         }
 
@@ -33,5 +40,11 @@ namespace SergioHdz.Scripts
         {
             gameObject.SetActive(active);
         }
+
+        public Sprite GetPortraitSprite()
+        {
+            return portrait;
+        }
     }
 }
+

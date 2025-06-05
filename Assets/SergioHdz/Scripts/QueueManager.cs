@@ -17,16 +17,18 @@ namespace SergioHdz.Scripts
         [Header("References")]
         [SerializeField] private GameObject npcPrefab;
         [SerializeField] private Button playButton;
+        [SerializeField] private Image npcPortraitUI;
 
-        private Queue<NPCController> npcQueue = new Queue<NPCController>();
-        private NPCController currentNpc;  
-        private NPCController npcInBooth;  
+        private Queue<NpcController> npcQueue = new Queue<NpcController>();
+        private NpcController currentNpc;
+        private NpcController npcInBooth;
 
         private void Start()
         {
             SpawnNpcs(5);
             AdvanceQueue();
             UpdatePlayButton();
+            ShowNpcImage(null);
         }
 
         private void SpawnNpcs(int count)
@@ -34,7 +36,7 @@ namespace SergioHdz.Scripts
             for (int i = 0; i < count; i++)
             {
                 GameObject npcGo = Instantiate(npcPrefab, queuePositions[i].position, Quaternion.identity);
-                NPCController npc = npcGo.GetComponent<NPCController>();
+                NpcController npc = npcGo.GetComponent<NpcController>();
                 npcQueue.Enqueue(npc);
             }
         }
@@ -67,17 +69,31 @@ namespace SergioHdz.Scripts
             if (currentNpc != null && npcInBooth == null)
             {
                 npcInBooth = currentNpc;
+                
+                npcInBooth.OnReachedDestination += HandleNpcReachedDestination;
+
                 npcInBooth.MoveTo(boothPosition.position);
                 currentNpc = null;
-                AdvanceQueue(); // Solo avanza la fila visual
-                UpdatePlayButton(); // Desactiva el botón
+                AdvanceQueue();
+                UpdatePlayButton();
             }
         }
+        
+        private void HandleNpcReachedDestination(NpcController npc)
+        {
+            if (npc == npcInBooth && Vector3.Distance(npc.Destination, boothPosition.position) < 0.01f)
+            {
+                ShowNpcImage(npc);
+            }
+        }
+
+
 
         public void AcceptNpc()
         {
             if (npcInBooth != null)
             {
+                ShowNpcImage(null);
                 npcInBooth.MoveTo(acceptPosition.position);
                 StartCoroutine(DestroyAfterDelay(npcInBooth));
             }
@@ -87,12 +103,13 @@ namespace SergioHdz.Scripts
         {
             if (npcInBooth != null)
             {
+                ShowNpcImage(null);
                 npcInBooth.MoveTo(rejectPosition.position);
                 StartCoroutine(DestroyAfterDelay(npcInBooth));
             }
         }
 
-        private IEnumerator DestroyAfterDelay(NPCController npc)
+        private IEnumerator DestroyAfterDelay(NpcController npc)
         {
             while (Vector3.Distance(npc.transform.position, acceptPosition.position) > 0.1f &&
                    Vector3.Distance(npc.transform.position, rejectPosition.position) > 0.1f)
@@ -102,14 +119,17 @@ namespace SergioHdz.Scripts
 
             yield return new WaitForSeconds(0.5f);
 
-            Destroy(npc.gameObject);
-
+            // ✅ Mover esta parte antes del Destroy
             if (npc == npcInBooth)
             {
                 npcInBooth = null;
-                UpdatePlayButton(); // Habilita el botón para el siguiente
+                ShowNpcImage(null);
+                UpdatePlayButton();
             }
+
+            Destroy(npc.gameObject);
         }
+
 
         private void UpdatePlayButton()
         {
@@ -118,8 +138,25 @@ namespace SergioHdz.Scripts
                 playButton.interactable = (npcInBooth == null && currentNpc != null);
             }
         }
+
+        private void ShowNpcImage(NpcController npc)
+        {
+            if (npcPortraitUI != null)
+            {
+                if (npc != null && npc.GetPortraitSprite() != null)
+                {
+                    npcPortraitUI.sprite = npc.GetPortraitSprite();
+                    npcPortraitUI.gameObject.SetActive(true);
+                }
+                else
+                {
+                    npcPortraitUI.gameObject.SetActive(false);
+                }
+            }
+        }
     }
 }
+
 
 
 
