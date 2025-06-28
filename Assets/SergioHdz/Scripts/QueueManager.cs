@@ -13,6 +13,10 @@ namespace SergioHdz.Scripts
         [SerializeField] private Transform boothPosition;
         [SerializeField] private Transform acceptPosition;
         [SerializeField] private Transform rejectPosition;
+        
+        [Header("Checkpoints")]
+        [SerializeField] private Transform acceptCheckpoint;
+        [SerializeField] private Transform rejectCheckpoint;
 
         [Header("References")]
         [SerializeField] private GameObject npcPrefab;
@@ -94,8 +98,8 @@ namespace SergioHdz.Scripts
             if (npcInBooth != null)
             {
                 ShowNpcImage(null);
-                npcInBooth.MoveTo(acceptPosition.position);
-                StartCoroutine(DestroyAfterDelay(npcInBooth));
+                npcInBooth.MoveTo(acceptCheckpoint.position);
+                StartCoroutine(HandleCheckpointThenFinal(npcInBooth, acceptCheckpoint.position, acceptPosition.position));
             }
         }
 
@@ -104,8 +108,8 @@ namespace SergioHdz.Scripts
             if (npcInBooth != null)
             {
                 ShowNpcImage(null);
-                npcInBooth.MoveTo(rejectPosition.position);
-                StartCoroutine(DestroyAfterDelay(npcInBooth));
+                npcInBooth.MoveTo(rejectCheckpoint.position);
+                StartCoroutine(HandleCheckpointThenFinal(npcInBooth, rejectCheckpoint.position, rejectPosition.position));
             }
         }
 
@@ -147,6 +151,7 @@ namespace SergioHdz.Scripts
                 {
                     npcPortraitUI.sprite = npc.GetPortraitSprite();
                     npcPortraitUI.gameObject.SetActive(true);
+                    npcPortraitUI.transform.SetAsFirstSibling();
                 }
                 else
                 {
@@ -154,6 +159,24 @@ namespace SergioHdz.Scripts
                 }
             }
         }
+        
+        private IEnumerator HandleCheckpointThenFinal(NpcController npc, Vector3 checkpoint, Vector3 finalDestination)
+        {
+            // Esperar a que llegue al checkpoint
+            while (Vector3.Distance(npc.transform.position, checkpoint) > 0.1f)
+            {
+                yield return null;
+            }
+
+            // ✅ Ya podemos activar el botón nuevamente
+            npcInBooth = null;
+            UpdatePlayButton();
+
+            // Luego continuar hacia la posición final
+            npc.MoveTo(finalDestination);
+            StartCoroutine(DestroyAfterDelay(npc));
+        }
+
     }
 }
 
