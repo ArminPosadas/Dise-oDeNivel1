@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bbe826ac916521e48a2323f96e753d92
+guid: 3420103183a38b94f90c4caee7f20aa5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1752391315275815328
-    second: Alarm_on_0
+      213: -6717884257390833292
+    second: Shield_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Alarm_on_0
+      name: Shield_0
       rect:
         serializedVersion: 2
-        x: 9
-        y: 16
-        width: 102
-        height: 78
+        x: 0
+        y: 0
+        width: 640
+        height: 576
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 066618122614ea7e0800000000000000
-      internalID: -1752391315275815328
+      spriteID: 471d70c5cd745c2a0800000000000000
+      internalID: -6717884257390833292
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Alarm_on_0: -1752391315275815328
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
